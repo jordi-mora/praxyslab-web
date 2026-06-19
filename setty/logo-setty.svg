@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 470 120" width="470" height="120">
+  
+  <g transform="translate(56,60) scale(0.62) translate(-30,-50)">
+    <g transform="skewX(-16)" stroke="#FFFFFF" stroke-linecap="round" fill="none"><line x1="-34" y1="28" x2="6" y2="28" stroke-width="11"></line><line x1="-44" y1="50" x2="2" y2="50" stroke-width="11"></line><line x1="-30" y1="72" x2="8" y2="72" stroke-width="11"></line><path d="M104 30 C104 21 86 18 64 18 C40 18 30 26 30 35 C30 45 46 48 64 50 C82 52 100 55 100 65 C100 76 82 82 58 82 C40 82 30 79 26 72" stroke-width="13"></path></g>
+  </g>
+  <text x="178" y="82" class="wm" fill="#FFFFFF">Setty</text>
+</svg>
