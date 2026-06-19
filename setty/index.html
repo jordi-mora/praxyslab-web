@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setty — El Setter IA que nunca para</title>
+  <meta name="description" content="Setty responde el 100% de tus mensajes, cualifica y agenda 24/7 para que ningún lead caliente se enfríe." />
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '#F97316',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0500;
+      --bg2: #190900;
+      --card: rgba(255,255,255,0.04);
+      --card-border: rgba(249,115,22,0.18);
+      --orange: #F97316;
+      --orange-d: #C2400C;
+      --green: #22C55E;
+      --red: #EF4444;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Ambient background ── */
+    .page-bg {
+      background:
+        radial-gradient(ellipse 100% 45% at 50% 0%, rgba(249,115,22,0.13) 0%, transparent 65%),
+        radial-gradient(ellipse 80% 30% at 50% 100%, rgba(249,115,22,0.07) 0%, transparent 60%),
+        var(--bg);
+    }
+
+    /* ── Stars ── */
+    #stars { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.55);
+    }
+
+    /* ── Top banner ── */
+    .banner {
+      background: linear-gradient(90deg, #D97706 0%, #F97316 100%);
+      padding: 10px 16px;
+      text-align: center;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      color: #fff;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* ── Buttons ── */
+    .btn-cta {
+      display: block;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 18px 24px;
+      background: linear-gradient(135deg, #F97316 0%, #C2400C 100%);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      text-align: center;
+    }
+    .btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(249,115,22,0.45);
+    }
+    .btn-cta:active { transform: translateY(0); }
+
+    /* ── Dark card ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    /* ── Video thumbnail ── */
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(249,115,22,0.3);
+      background: linear-gradient(135deg, #1a0900 0%, #2d1200 50%, #1a0900 100%);
+      aspect-ratio: 16/9;
+      cursor: pointer;
+    }
+    .video-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(249,115,22,0.08) 0%, transparent 70%);
+    }
+    .play-circle {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 2;
+    }
+    .play-btn {
+      width: 68px;
+      height: 68px;
+      background: rgba(255,255,255,0.18);
+      border: 2px solid rgba(255,255,255,0.45);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s, background 0.15s;
+    }
+    .video-wrap:hover .play-btn {
+      background: rgba(255,255,255,0.28);
+      transform: scale(1.08);
+    }
+    .video-badge {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      text-align: right;
+      line-height: 1.2;
+    }
+    .video-caption {
+      position: absolute;
+      bottom: 12px;
+      left: 0; right: 0;
+      text-align: center;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.82rem;
+    }
+
+    /* ── Testimonial card ── */
+    .testi-card {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(249,115,22,0.2);
+      background: linear-gradient(160deg, #1e0c00, #2a1400);
+      aspect-ratio: 9/16;
+      position: relative;
+      cursor: pointer;
+    }
+    .testi-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.85) 100%);
+    }
+    .testi-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      z-index: 2;
+      background: rgba(249,115,22,0.2);
+      border: 1px solid rgba(249,115,22,0.4);
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #F97316;
+      letter-spacing: 0.03em;
+    }
+    .testi-play {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    .testi-play-btn {
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.18);
+      border: 1.5px solid rgba(255,255,255,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .testi-body {
+      position: absolute;
+      bottom: 0;
+      left: 0; right: 0;
+      padding: 10px;
+      z-index: 3;
+    }
+
+    /* ── Compare cards ── */
+    .cmp-card {
+      background: rgba(10,4,0,0.9);
+      border-radius: 14px;
+      padding: 20px;
+      border: 1px solid rgba(249,115,22,0.2);
+    }
+    .cmp-li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: #d1d5db;
+      padding: 3px 0;
+    }
+    .cmp-li .icon { flex-shrink: 0; margin-top: 1px; }
+
+    /* ── VS ── */
+    .vs-bubble {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #F97316, #C2400C);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 0.85rem;
+      color: #fff;
+      margin: 0 auto;
+      flex-shrink: 0;
+    }
+
+    /* ── Pipeline ── */
+    .pipe-wrap {
+      position: relative;
+      padding-left: 44px;
+    }
+    .pipe-line {
+      position: absolute;
+      left: 11px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--orange) 0%, #C2400C 100%);
+    }
+    .pipe-dot {
+      position: absolute;
+      left: 5px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--orange);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 10px rgba(249,115,22,0.7);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .pipe-item {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    /* ── Phase circles ── */
+    .phase-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Chat bubble ── */
+    .chat-bbl {
+      background: rgba(10,4,0,0.95);
+      border: 1px solid rgba(249,115,22,0.15);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    /* ── Founder photo ── */
+    .founder-photo {
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto 20px;
+      border: 2px solid rgba(249,115,22,0.4);
+      box-shadow: 0 0 30px rgba(249,115,22,0.2);
+    }
+    .founder-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    /* ── Modal ── */
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.78);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 16px;
+    }
+    .modal-bg.open { display: flex; }
+
+    .modal-box {
+      background: #1a0900;
+      border: 1px solid rgba(249,115,22,0.35);
+      border-radius: 18px;
+      padding: 28px 24px;
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.08);
+      border: none;
+      border-radius: 50%;
+      color: #9ca3af;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+    .modal-close:hover { color: #fff; }
+
+    /* ── Input fields ── */
+    .inp {
+      width: 100%;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(249,115,22,0.3);
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: #fff;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .inp:focus { border-color: var(--orange); }
+    .inp::placeholder { color: rgba(255,255,255,0.28); }
+
+    .inp-phone-wrap { display: flex; }
+    .inp-country {
+      background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(249,115,22,0.3);
+      border-right: none;
+      border-radius: 10px 0 0 10px;
+      padding: 14px 12px;
+      color: #fff;
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .inp-phone {
+      flex: 1;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(249,115,22,0.3);
+      border-left: none;
+      border-radius: 0 10px 10px 0;
+      padding: 14px 16px;
+      color: #fff;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+    }
+    .inp-phone::placeholder { color: rgba(255,255,255,0.28); }
+    .inp-country:focus, .inp-phone:focus { border-color: var(--orange); }
+
+    .btn-submit {
+      width: 100%;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #FBBF24 0%, #D97706 100%);
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 800;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(251,191,36,0.4); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .hidden { display: none !important; }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid rgba(249,115,22,0.12);
+      padding: 32px 16px;
+      text-align: center;
+    }
+    footer a { color: #6b7280; text-decoration: none; transition: color 0.15s; }
+    footer a:hover { color: var(--orange); }
+
+    /* ── Section spacing ── */
+    section { padding: 56px 16px; }
+
+    /* ── Utility ── */
+    .max-w { max-width: 520px; margin: 0 auto; }
+    .text-orange { color: var(--orange); }
+    .label-sm {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+  </style>
+</head>
+<body class="page-bg">
+
+<!-- ══════════════════════════════════
+     TOP BANNER
+═══════════════════════════════════ -->
+<div class="banner">
+  🔥 Solo trabajamos con <strong>5 negocios nuevos al mes</strong> para garantizar resultados
+</div>
+
+<!-- ══════════════════════════════════
+     HERO
+═══════════════════════════════════ -->
+<section style="padding-top: 48px; padding-bottom: 52px; position: relative; overflow: hidden;">
+  <div id="stars"></div>
+
+  <div class="max-w">
+    <!-- Logo -->
+    <div style="text-align:center; margin-bottom: 28px; position: relative; z-index: 1;">
+      <span style="font-size: 2.4rem; font-weight: 900; letter-spacing: -0.02em; color: #fff;">Setty</span>
+    </div>
+
+    <!-- Headline -->
+    <div style="text-align:center; position: relative; z-index: 1; margin-bottom: 16px;">
+      <h1 style="font-size: clamp(1.65rem, 7vw, 2.15rem); font-weight: 900; line-height: 1.22; color: #fff;">
+        Un setter humano no puede<br />contestarlo todo.
+        <span class="text-orange">Setty sí.</span>
+      </h1>
+    </div>
+
+    <!-- Sub -->
+    <p style="text-align:center; color: #d1d5db; font-weight: 600; font-size: 0.97rem; line-height: 1.65; margin-bottom: 28px; position: relative; z-index: 1;">
+      Responde el 100% de tus mensajes, cualifica y agenda 24/7<br />
+      para que ningún lead caliente se enfríe.
+    </p>
+
+    <!-- Video -->
+    <div class="video-wrap" onclick="openModal()" style="margin-bottom: 24px; position: relative; z-index: 1;">
+      <div class="video-badge">
+        <div style="font-weight: 900; font-size: 1.15rem; color: var(--orange); line-height: 1.1;">+1600 VENTAS</div>
+        <div style="font-weight: 900; font-size: 1.15rem; color: var(--orange); line-height: 1.1;">EN AUTOMÁTICO</div>
+        <div style="color: var(--orange); font-size: 1.4rem; font-weight: 900; margin-top: 2px;">→</div>
+      </div>
+      <div class="play-circle">
+        <div class="play-btn">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="white">
+            <polygon points="6,3 20,12 6,21"/>
+          </svg>
+        </div>
+      </div>
+      <div class="video-caption">Haz click para reproducir</div>
+    </div>
+
+    <!-- CTA -->
+    <button class="btn-cta" onclick="openModal()" style="position: relative; z-index: 1;">
+      PRUEBA NUESTRO SETTER IA
+    </button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     SOCIAL PROOF
+═══════════════════════════════════ -->
+<section>
+  <div class="max-w">
+    <!-- Title -->
+    <h2 style="font-size: clamp(1.6rem, 6.5vw, 2rem); font-weight: 900; text-align:center; margin-bottom: 8px; line-height: 1.25;">
+      No lo decimos nosotros. <span class="text-orange">Lo dicen ellos.</span>
+    </h2>
+    <p style="text-align:center; color: #9ca3af; margin-bottom: 24px; font-size: 0.9rem;">
+      Haz click en cualquier video para escuchar su testimonio
+    </p>
+
+    <!-- Testimonial grid 3 cols -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
+
+      <!-- Card 1 -->
+      <div class="testi-card" onclick="openModal()">
+        <div class="testi-badge">★ TOP SETTER</div>
+        <div class="testi-play">
+          <div class="testi-play-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
+          </div>
+        </div>
+        <div class="testi-body">
+          <div style="font-weight: 900; font-size: 0.68rem; line-height: 1.2; color: #fff;">
+            Multiplicó por<br/>
+            <span style="font-size: 1.7rem; line-height: 1.1;">100%</span><br/>
+            <span style="font-size: 0.62rem; font-weight: 600;">sus agendas en días</span>
+          </div>
+          <div style="font-size: 0.6rem; color: #6b7280; margin-top: 4px;">@davidruiz.fitness</div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="testi-card" onclick="openModal()">
+        <div class="testi-badge">★ TOP SETTER</div>
+        <div class="testi-play">
+          <div class="testi-play-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
+          </div>
+        </div>
+        <div class="testi-body">
+          <div style="font-weight: 900; font-size: 0.65rem; line-height: 1.25; color: #fff;">
+            Así se ahorró +25K€<br/>en setters en<br/>
+            <span style="font-size: 1.5rem; line-height: 1.1;">2 HORAS</span><br/>
+            <span style="font-size: 0.6rem; font-weight: 600;">con Setty</span>
+          </div>
+          <div style="font-size: 0.6rem; color: #6b7280; margin-top: 4px;">@rous.loveyourbody</div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="testi-card" onclick="openModal()">
+        <div class="testi-badge">★ TOP SETTER</div>
+        <div class="testi-play">
+          <div class="testi-play-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
+          </div>
+        </div>
+        <div class="testi-body">
+          <div style="font-weight: 900; font-size: 0.65rem; line-height: 1.25; color: #fff;">
+            Primera<br/>
+            <span style="font-size: 1.5rem; line-height: 1.05;">LLA&shy;MADA</span><br/>
+            <span style="font-size: 0.6rem; font-weight: 600;">agendada en minutos</span>
+          </div>
+          <div style="font-size: 0.6rem; color: #6b7280; margin-top: 4px;">@cliente.mkt</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- More testimonials -->
+    <p style="text-align:center; color: #6b7280; margin-bottom: 28px; font-size: 0.9rem;">
+      ¿No te convencen? <span class="text-orange" style="font-weight: 700;">Mira más testimonios.</span>
+    </p>
+
+    <!-- Chat bubbles -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+      <div class="chat-bbl">
+        <div style="font-weight: 700; font-size: 0.82rem; color: var(--orange); margin-bottom: 6px;">Marc Rodríguez</div>
+        <p style="font-size: 0.82rem; color: #d1d5db; line-height: 1.5;">Qué locura e 10 agendas ayer y 10 hoy me parece muy loco con tan poco tráfico. La velocidad de respuesta marca la diferencia 100%</p>
+        <div style="font-size: 0.7rem; color: #6b7280; text-align: right; margin-top: 8px;">18:10 ✓✓</div>
+      </div>
+      <div class="chat-bbl">
+        <div style="font-weight: 700; font-size: 0.82rem; color: var(--orange); margin-bottom: 6px;">Carla Balasc</div>
+        <p style="font-size: 0.82rem; color: #d1d5db; line-height: 1.5;">Perfectcct ya lleva 2 agendas más en 20 min que lleva funcionando</p>
+        <div style="font-size: 0.7rem; color: #6b7280; text-align: right; margin-top: 8px;">8:27 ✓✓</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     CTA MID
+═══════════════════════════════════ -->
+<div style="padding: 8px 16px 48px;">
+  <button class="btn-cta" onclick="openModal()">
+    PRUEBA NUESTRO SETTER IA
+  </button>
+</div>
+
+<!-- ══════════════════════════════════
+     PROBLEM / COMPARISON
+═══════════════════════════════════ -->
+<section>
+  <div class="max-w">
+    <p class="label-sm" style="text-align:center; margin-bottom: 10px;">EL PROBLEMA REAL</p>
+    <h2 style="font-size: clamp(1.6rem, 6.5vw, 2rem); font-weight: 900; text-align:center; line-height: 1.25; margin-bottom: 14px;">
+      Tu setter humano tiene <span class="text-orange">límites. Setty</span><br/>no.
+    </h2>
+    <p style="text-align:center; color: #9ca3af; font-size: 0.9rem; line-height: 1.65; margin-bottom: 28px;">
+      Un setter humano duerme, se quema, tarda en responder y se le escapan leads. Setty hace lo mismo que él, pero 24/7, al segundo, y sin que nadie note la diferencia.
+    </p>
+
+    <!-- Human Setter -->
+    <div class="cmp-card" style="margin-bottom: 0;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <span style="font-size: 1.5rem;">❌</span>
+        <div>
+          <div style="font-weight: 700; color: #fff;">Setter Humano</div>
+          <div style="font-size: 0.8rem; color: #6b7280;">Limitado por horas, energía y capacidad</div>
+        </div>
+      </div>
+      <ul style="list-style: none;">
+        <li class="cmp-li"><span class="icon" style="color: var(--red);">✕</span> Solo trabaja 8-10 horas al día</li>
+        <li class="cmp-li"><span class="icon" style="color: var(--red);">✕</span> Se le escapan leads fuera de horario</li>
+        <li class="cmp-li"><span class="icon" style="color: var(--red);">✕</span> Tarda minutos u horas en responder</li>
+        <li class="cmp-li"><span class="icon" style="color: var(--red);">✕</span> Se quema, tiene días malos, rota</li>
+        <li class="cmp-li"><span class="icon" style="color: var(--red);">✕</span> No puede atender 50 leads a la vez</li>
+        <li class="cmp-li"><span class="icon" style="color: var(--red);">✕</span> Coste fijo mensual alto (sueldo + formación)</li>
+      </ul>
+    </div>
+
+    <!-- VS -->
+    <div style="display: flex; align-items: center; gap: 12px; padding: 14px 0;">
+      <div style="flex: 1; height: 1px; background: rgba(249,115,22,0.25);"></div>
+      <div class="vs-bubble">VS</div>
+      <div style="flex: 1; height: 1px; background: rgba(249,115,22,0.25);"></div>
+    </div>
+
+    <!-- Setter IA -->
+    <div class="cmp-card">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <span style="font-size: 1.5rem;">✅</span>
+        <div>
+          <div style="font-weight: 700; color: #fff;">Setter IA (Setty)</div>
+          <div style="font-size: 0.8rem; color: #6b7280;">24/7, al segundo, indistinguible de un humano</div>
+        </div>
+      </div>
+      <ul style="list-style: none;">
+        <li class="cmp-li"><span class="icon" style="color: var(--green);">✓</span> Trabaja las 24 horas, los 7 días</li>
+        <li class="cmp-li"><span class="icon" style="color: var(--green);">✓</span> Responde en segundos, no pierde ni un lead</li>
+        <li class="cmp-li"><span class="icon" style="color: var(--green);">✓</span> Atiende 1 o 1,000 leads a la vez</li>
+        <li class="cmp-li"><span class="icon" style="color: var(--green);">✓</span> Nunca se quema, nunca rota, siempre consistente</li>
+        <li class="cmp-li"><span class="icon" style="color: var(--green);">✓</span> Agenda llamadas y vende directamente</li>
+        <li class="cmp-li"><span class="icon" style="color: var(--green);">✓</span> Coste fijo bajo, escala sin contratar</li>
+        <li class="cmp-li"><span class="icon" style="color: var(--green);">✓</span> Resuelve objeciones como un closer senior</li>
+        <li class="cmp-li"><span class="icon" style="color: var(--green);">✓</span> Garantizado: nadie sabrá que es una IA</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     FOUNDER
+═══════════════════════════════════ -->
+<section>
+  <div class="max-w" style="text-align: center;">
+    <div class="founder-photo">
+      <img src="./jordi.png" alt="Jordi Mora" loading="lazy" />
+    </div>
+
+    <h3 style="font-size: 1.5rem; font-weight: 900; color: #fff; margin-bottom: 4px;">Jordi Mora</h3>
+    <div style="color: var(--orange); font-weight: 600; margin-bottom: 20px;">Co-founder de Setty</div>
+
+    <p style="color: #d1d5db; line-height: 1.72; font-size: 0.95rem; margin-bottom: 28px;">
+      Llevo años construyendo sistemas de ventas para negocios digitales. Junto con mi equipo, hemos ayudado a cientos de emprendedores a escalar sus resultados sin contratar más personas.<br/><br/>
+      Después de ver cómo el 80% de los leads se pierden por falta de respuesta rápida, decidimos construir <strong style="color:#fff;">nuestro propio Setter IA desde cero</strong>. Setty es ese Setter + la infraestructura que lo respalda.
+    </p>
+
+    <!-- Stats -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; border-top: 1px solid rgba(249,115,22,0.15); padding-top: 24px;">
+      <div>
+        <div style="font-size: 1.6rem; font-weight: 900; color: #fff;">+100</div>
+        <div style="font-size: 0.78rem; color: #6b7280; margin-top: 2px;">Clientes</div>
+      </div>
+      <div>
+        <div style="font-size: 1.6rem; font-weight: 900; color: #fff;">+5 años</div>
+        <div style="font-size: 0.78rem; color: #6b7280; margin-top: 2px;">Experiencia</div>
+      </div>
+      <div>
+        <div style="font-size: 1.6rem; font-weight: 900; color: #fff;">+50K€</div>
+        <div style="font-size: 0.78rem; color: #6b7280; margin-top: 2px;">En R&D</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     HOW IT WORKS
+═══════════════════════════════════ -->
+<section>
+  <div class="max-w">
+    <p class="label-sm" style="text-align:center; margin-bottom: 10px;">ASÍ TRABAJA TU SETTER IA</p>
+    <h2 style="font-size: clamp(1.6rem, 6.5vw, 2rem); font-weight: 900; text-align:center; line-height: 1.25; margin-bottom: 14px;">
+      Setty hace el trabajo sucio. <span class="text-orange">Tu closer<br/>solo cierra.</span>
+    </h2>
+    <p style="text-align:center; color: #9ca3af; font-size: 0.9rem; line-height: 1.65; margin-bottom: 36px;">
+      Cada lead pasa por un pipeline automático. Se cualifica, se calienta, se resuelven objeciones y se agenda o se cierra la venta.
+    </p>
+
+    <!-- Pipeline -->
+    <div class="pipe-wrap">
+      <div class="pipe-line"></div>
+
+      <!-- Lead sources -->
+      <div class="pipe-item">
+        <div class="pipe-dot" style="top: 24px;"></div>
+        <div class="card" style="margin-bottom: 10px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 1.4rem; flex-shrink:0;">🧊</span>
+            <div>
+              <div style="font-weight: 700; color: #fff;">Leads Fríos</div>
+              <div style="font-size: 0.8rem; color: #6b7280;">Meta Ads, TikTok, YouTube</div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom: 10px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 1.4rem; flex-shrink:0;">🌡️</span>
+            <div>
+              <div style="font-weight: 700; color: #fff;">Leads Templados</div>
+              <div style="font-size: 0.8rem; color: #6b7280;">Orgánico, SEO, Reels</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 1.4rem; flex-shrink:0;">🔥</span>
+            <div>
+              <div style="font-weight: 700; color: #fff;">Leads Calientes</div>
+              <div style="font-size: 0.8rem; color: #6b7280;">Referidos, Webinar, VSL</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Setty bot -->
+      <div class="pipe-item" style="margin-top: 16px;">
+        <div class="pipe-dot" style="top: 24px;"></div>
+        <div class="card" style="border-color: rgba(249,115,22,0.4);">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+            <span style="font-size: 1.5rem; flex-shrink:0;">🤖</span>
+            <div>
+              <div style="font-weight: 700; color: #fff;">Setty (Setter IA)</div>
+              <div style="font-size: 0.8rem; color: #6b7280;">Procesando leads automáticamente</div>
+            </div>
+          </div>
+
+          <!-- Sub-items -->
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="card" style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #d1d5db;">
+              <span>💬</span> Inicia conversación en segundos
+            </div>
+            <div class="card" style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #d1d5db;">
+              <span>🧠</span> Detecta intención de compra
+            </div>
+            <div class="card">
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <span>🎯</span>
+                <div>
+                  <div style="font-weight: 700; color: #fff; font-size: 0.9rem;">8 Fases de Cualificación</div>
+                  <div style="font-size: 0.75rem; color: #6b7280;">Basadas en datos reales de venta</div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <div class="phase-circle">1</div>
+                <div class="phase-circle">2</div>
+                <div class="phase-circle">3</div>
+                <div class="phase-circle">4</div>
+                <div class="phase-circle">5</div>
+                <div class="phase-circle">6</div>
+                <div class="phase-circle">7</div>
+                <div class="phase-circle">8</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Outcomes -->
+      <div class="pipe-item" style="margin-top: 16px;">
+        <div class="pipe-dot" style="top: 28px;"></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div class="card">
+            <div style="font-size: 1.4rem; margin-bottom: 8px;">📅</div>
+            <div style="font-weight: 700; color: #fff; font-size: 0.9rem;">Llamada Agendada</div>
+            <div style="font-size: 0.75rem; color: #6b7280; margin-top: 4px;">Lead caliente listo para tu closer</div>
+          </div>
+          <div>
+            <div style="text-align:center; color: #6b7280; font-size: 0.85rem; padding: 10px 0; font-weight: 600;">ó</div>
+            <div class="card">
+              <div style="font-size: 1.4rem; margin-bottom: 8px;">💰</div>
+              <div style="font-weight: 700; color: #fff; font-size: 0.9rem;">Venta Directa</div>
+              <div style="font-size: 0.75rem; color: #6b7280; margin-top: 4px;">Cierre automático en el chat</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     FINAL CTA
+═══════════════════════════════════ -->
+<div style="padding: 0 16px 64px;">
+  <button class="btn-cta" onclick="openModal()">
+    PRUEBA NUESTRO SETTER IA
+  </button>
+</div>
+
+<!-- ══════════════════════════════════
+     FOOTER
+═══════════════════════════════════ -->
+<footer>
+  <p style="font-size: 0.82rem; color: #4b5563; margin-bottom: 12px;">
+    © 2026 Setty by Praxys Lab. Todos los derechos reservados.
+  </p>
+  <div style="display: flex; justify-content: center; gap: 24px;">
+    <a href="/setty/terminos.html" style="font-size: 0.82rem;">Términos y Condiciones</a>
+    <a href="/politica-de-privacidad.html" style="font-size: 0.82rem;">Política de Privacidad</a>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════
+     MODAL
+═══════════════════════════════════ -->
+<div class="modal-bg" id="modal" onclick="handleOverlayClick(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+
+    <!-- Online indicator -->
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px;">
+      <div style="width:9px; height:9px; border-radius:50%; background: #22C55E; box-shadow: 0 0 8px #22C55E; flex-shrink:0;"></div>
+      <span style="font-size: 0.85rem; color: #9ca3af;">Equipo Setty · en línea</span>
+    </div>
+
+    <h3 style="font-size: 1.5rem; font-weight: 900; color: #fff; margin-bottom: 22px;">
+      Prueba nuestro Setter IA
+    </h3>
+
+    <!-- Form -->
+    <div id="form-wrap">
+      <div style="margin-bottom: 16px;">
+        <label style="display:block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9ca3af; margin-bottom: 8px;">
+          Tu Nombre
+        </label>
+        <input type="text" id="f-nombre" class="inp" placeholder="Tu nombre" autocomplete="given-name" />
+      </div>
+
+      <div style="margin-bottom: 22px;">
+        <label style="display:block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9ca3af; margin-bottom: 8px;">
+          Tu WhatsApp
+        </label>
+        <div class="inp-phone-wrap">
+          <select id="f-country" class="inp-country">
+            <option value="+34">🇪🇸 +34</option>
+            <option value="+52">🇲🇽 +52</option>
+            <option value="+54">🇦🇷 +54</option>
+            <option value="+57">🇨🇴 +57</option>
+            <option value="+56">🇨🇱 +56</option>
+            <option value="+51">🇵🇪 +51</option>
+            <option value="+1">🇺🇸 +1</option>
+          </select>
+          <input type="tel" id="f-phone" class="inp-phone" placeholder="697 458 202" autocomplete="tel" />
+        </div>
+      </div>
+
+      <button class="btn-submit" id="btn-submit" onclick="submitLead()">
+        Quiero probar el Setter IA
+      </button>
+
+      <div style="display:flex; align-items:center; justify-content:center; gap:6px; color:#4b5563; font-size:0.78rem; margin-top:12px;">
+        🔒 Nuestro Setter IA te escribirá por WhatsApp. Sin spam.
+      </div>
+
+      <div style="text-align:center; margin-top:10px;">
+        <a href="/setty/terminos.html" target="_blank" style="font-size:0.72rem; color:#4b5563; text-decoration:underline;">
+          Términos y Condiciones
+        </a>
+      </div>
+    </div>
+
+    <!-- Success state -->
+    <div id="form-success" class="hidden" style="text-align:center; padding: 16px 0;">
+      <div style="font-size: 2.5rem; margin-bottom: 14px;">📱</div>
+      <p style="color: var(--orange); font-weight: 700; font-size: 1.05rem; margin-bottom: 8px;">
+        ¡Hecho! Te escribiremos por WhatsApp en un rato
+      </p>
+      <p style="color: #6b7280; font-size: 0.9rem;">Atento al móvil.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════ -->
+<script>
+  /* Stars */
+  (function() {
+    var c = document.getElementById('stars');
+    if (!c) return;
+    for (var i = 0; i < 70; i++) {
+      var s = document.createElement('div');
+      s.className = 'star';
+      s.style.left  = (Math.random() * 100) + '%';
+      s.style.top   = (Math.random() * 100) + '%';
+      s.style.width = s.style.height = (Math.random() * 2 + 0.8) + 'px';
+      s.style.opacity = (Math.random() * 0.45 + 0.1).toFixed(2);
+      c.appendChild(s);
+    }
+  })();
+
+  /* Modal */
+  function openModal() {
+    document.getElementById('modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('modal')) closeModal();
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  /* Submit */
+  async function submitLead() {
+    var nombre = (document.getElementById('f-nombre').value || '').trim();
+    var country = document.getElementById('f-country').value;
+    var phone  = (document.getElementById('f-phone').value || '').trim();
+
+    if (!nombre || !phone) {
+      alert('Por favor rellena tu nombre y número de WhatsApp.');
+      return;
+    }
+
+    var btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    try {
+      await fetch('https://denis-n8n.qg6tgg.easypanel.host/webhook/vsl', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: nombre,
+          whatsapp: country + phone,
+          fuente: 'setty-landing',
+          pagina: window.location.href
+        })
+      });
+    } catch (err) {
+      /* fail silently — show success anyway */
+    }
+
+    document.getElementById('form-wrap').classList.add('hidden');
+    document.getElementById('form-success').classList.remove('hidden');
+  }
+</script>
+
+</body>
+</html>
