@@ -479,6 +479,54 @@
 
     .hidden { display: none !important; }
 
+    /* ── FAQ ── */
+    .faq-item {
+      border: 1px solid rgba(225,16,48,0.18);
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.03);
+    }
+    .faq-q {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .faq-q:hover { background: rgba(225,16,48,0.06); }
+    .faq-icon {
+      font-size: 1.3rem;
+      color: #E11030;
+      flex-shrink: 0;
+      line-height: 1;
+      transition: transform 0.25s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.25s;
+      font-size: 0.875rem;
+      color: #9ca3af;
+      line-height: 1.7;
+      padding: 0 18px;
+    }
+    .faq-item.open .faq-a {
+      max-height: 300px;
+      padding: 0 18px 16px;
+    }
+    .faq-item.open { border-color: rgba(225,16,48,0.35); }
+
     /* ── Footer ── */
     footer {
       border-top: 1px solid rgba(225,16,48,0.12);
@@ -937,22 +985,106 @@
       <!-- Outcomes -->
       <div class="pipe-item" style="margin-top: 16px;">
         <div class="pipe-dot" style="top: 28px;"></div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-          <div class="card">
+        <div style="display: flex; align-items: stretch; gap: 8px;">
+          <div class="card" style="flex: 1;">
             <div style="font-size: 1.4rem; margin-bottom: 8px;">📅</div>
             <div style="font-weight: 700; color: #fff; font-size: 0.9rem;">Llamada Agendada</div>
             <div style="font-size: 0.75rem; color: #6b7280; margin-top: 4px;">Lead caliente listo para tu closer</div>
           </div>
-          <div>
-            <div style="text-align:center; color: #6b7280; font-size: 0.85rem; padding: 10px 0; font-weight: 600;">ó</div>
-            <div class="card">
-              <div style="font-size: 1.4rem; margin-bottom: 8px;">💰</div>
-              <div style="font-weight: 700; color: #fff; font-size: 0.9rem;">Venta Directa</div>
-              <div style="font-size: 0.75rem; color: #6b7280; margin-top: 4px;">Cierre automático en el chat</div>
-            </div>
+          <div style="display:flex; align-items:center; justify-content:center; padding: 0 4px; color: #6b7280; font-size: 0.85rem; font-weight: 700; flex-shrink:0;">ó</div>
+          <div class="card" style="flex: 1;">
+            <div style="font-size: 1.4rem; margin-bottom: 8px;">💰</div>
+            <div style="font-weight: 700; color: #fff; font-size: 0.9rem;">Venta Directa</div>
+            <div style="font-size: 0.75rem; color: #6b7280; margin-top: 4px;">Cierre automático en el chat</div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     FAQ
+═══════════════════════════════════ -->
+<section>
+  <div class="max-w">
+    <p class="label-sm" style="text-align:center; margin-bottom: 10px;">PREGUNTAS FRECUENTES</p>
+    <h2 style="font-size: clamp(1.5rem, 6vw, 1.9rem); font-weight: 900; text-align:center; line-height: 1.3; margin-bottom: 32px;">
+      Todo lo que necesitas<br/><span class="text-orange">saber sobre Setty</span>
+    </h2>
+
+    <div style="display: flex; flex-direction: column; gap: 10px;" id="faqList">
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>¿Qué es exactamente Setty?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Setty es un Setter IA que gestiona tus conversaciones de ventas en WhatsApp de forma autónoma. Responde en segundos, cualifica leads según tus criterios, resuelve objeciones y agenda llamadas con tu closer — sin que tengas que intervenir.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>¿Funciona con cualquier tipo de negocio?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Funciona especialmente bien en infoproductos, formaciones, consultoría, servicios high-ticket y cualquier negocio con volumen de leads entrantes por WhatsApp. Si tienes leads que no se convierten en llamadas, Setty es para ti.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>¿Cuánto tiempo tarda en estar operativo?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Entre 48 y 72 horas desde que confirmamos tu onboarding. Nuestro equipo configura todo: el flujo de conversación, las fases de cualificación y la integración con tu calendario o CRM.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>¿Necesito seguir teniendo un setter humano?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          No. Setty sustituye por completo al setter humano en la fase de cualificación y agendado. Tu equipo puede enfocarse en lo que de verdad importa: cerrar las llamadas ya calentadas.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>¿En qué plataformas funciona Setty?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Principalmente en WhatsApp (API oficial). También podemos integrarlo con Instagram DMs y otras plataformas de mensajería según tu caso específico.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>¿Los leads se dan cuenta de que es una IA?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          No. Setty está entrenado para conversar de forma natural, con el tono y la personalidad de tu marca. Los leads lo perciben como un asistente de ventas real — porque lo es.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>¿Qué pasa si un lead hace una pregunta muy específica?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Setty está entrenado con toda la información de tu negocio, producto y objeciones habituales. En casos muy concretos que salgan de su base de conocimiento, puede escalar la conversación a un humano de forma transparente.
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -1072,7 +1204,14 @@
   })();
 
   /* Modal */
-  function openModal() {
+  function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+function openModal() {
     document.getElementById('modal').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
