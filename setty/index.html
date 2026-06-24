@@ -16,6 +16,9 @@
   <link rel="dns-prefetch" href="https://scripts.converteai.net">
   <link rel="dns-prefetch" href="https://images.converteai.net">
   <link rel="dns-prefetch" href="https://license.vturb.com">
+  <!-- iClosed popup widget begin -->
+  <script type="text/javascript" src="https://app.iclosed.io/assets/widget.js" async></script>
+  <!-- iClosed popup widget end -->
   <!-- Meta Pixel -->
   <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1553964829784953');fbq('track','PageView');</script>
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1553964829784953&ev=PageView&noscript=1"/></noscript>
@@ -1224,12 +1227,23 @@ function openModal() {
         })
       });
     } catch (err) {
-      /* fail silently — show success anyway */
+      /* fail silently */
     }
 
-    window.location.href = '/setty/gracias';
+    if (typeof fbq !== 'undefined') fbq('track', 'Lead');
+
+    closeModal();
+
+    var iClosedBase = 'https://app.iclosed.io/e/deniscorral/setty';
+    var iClosedUrl = iClosedBase + '?name=' + encodeURIComponent(nombre) + '&phone=' + encodeURIComponent(country + phone);
+    var trigger = document.getElementById('iclosed-trigger');
+    trigger.setAttribute('data-iclosed-link', iClosedUrl);
+    trigger.click();
   }
 </script>
+
+<!-- iClosed hidden trigger -->
+<button id="iclosed-trigger" data-iclosed-link="https://app.iclosed.io/e/deniscorral/setty" data-embed-type="popup" style="position:absolute;opacity:0;pointer-events:none;width:0;height:0;overflow:hidden;"></button>
 
 </body>
 </html>
